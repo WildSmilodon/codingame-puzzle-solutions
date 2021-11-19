@@ -1,0 +1,11 @@
+./race-1.0 < test1 > results
+./race-1.0 < test2 >> results
+./race-1.0 < test3 >> results
+./race-1.0 < test4 >> results
+./race-1.0 < test5 >> results
+./race-1.0 < test6 >> results
+./race-1.0 < test7 >> results
+./race-1.0 < test16 >> results
+./race-1.0 < test19 >> results
+awk '{x+=$0}END{print x}' results >> results
+cat results

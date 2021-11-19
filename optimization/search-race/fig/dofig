@@ -1,0 +1,4 @@
+gnuplot gpfigure.gp
+pdflatex -interaction=nonstopmode fig.tex
+pdfcrop --margins "5" fig.pdf
+mv fig-crop.pdf figure.pdf
