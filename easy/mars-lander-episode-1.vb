@@ -1,4 +1,4 @@
-' https://www.codingame.com/ide/puzzle/mars-lander-episode-1
+' /https://www.codingame.com/training/easy/mars-lander-episode-1
 
 Module Player
 ' Auto-generated code below aims at helping you parse

@@ -1,4 +1,4 @@
-// https://www.codingame.com/ide/puzzle/power-of-thor-episode-1
+// /https://www.codingame.com/training/easy/power-of-thor-episode-1
 
 #include <iostream>
 #include <string>

@@ -1,4 +1,4 @@
-/** https://www.codingame.com/ide/puzzle/brackets-extreme-edition **/
+/** /https://www.codingame.com/training/easy/brackets-extreme-edition **/
 
 #include <iostream>
 #include <string>
