@@ -77,6 +77,7 @@
 * https://www.codingame.com/training/medium/langtons-ant
 * https://www.codingame.com/training/medium/mars-lander-episode-2
 * https://www.codingame.com/training/medium/mayan-calculation
+* https://www.codingame.com/training/medium/minesweeper-1
 * https://www.codingame.com/training/medium/network-cabling
 * https://www.codingame.com/training/medium/rubik%C2%AE
 * https://www.codingame.com/training/medium/scrabble
