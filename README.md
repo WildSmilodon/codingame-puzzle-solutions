@@ -79,6 +79,7 @@
 * https://www.codingame.com/training/medium/mayan-calculation
 * https://www.codingame.com/training/medium/minesweeper-1
 * https://www.codingame.com/training/medium/network-cabling
+* https://www.codingame.com/training/medium/particle-detection-with-cloud-chamber
 * https://www.codingame.com/training/medium/rubik%C2%AE
 * https://www.codingame.com/training/medium/scrabble
 * https://www.codingame.com/training/medium/shadows-of-the-knight-episode-1
