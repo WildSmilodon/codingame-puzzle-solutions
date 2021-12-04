@@ -22,6 +22,7 @@
 * https://www.codingame.com/multiplayer/bot-programming/tic-tac-toe
 * https://www.codingame.com/multiplayer/bot-programming/vindinium
 * https://www.codingame.com/multiplayer/bot-programming/xmas-rush
+* https://www.codingame.com/multiplayer/bot-programming/space-shooter
 
 ## Optimization
 
