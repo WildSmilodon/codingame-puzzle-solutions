@@ -17,12 +17,12 @@
 * https://www.codingame.com/multiplayer/bot-programming/mean-max
 * https://www.codingame.com/multiplayer/bot-programming/ocean-of-code
 * https://www.codingame.com/multiplayer/bot-programming/poker-chip-race
+* https://www.codingame.com/multiplayer/bot-programming/space-shooter
 * https://www.codingame.com/multiplayer/bot-programming/spring-challenge-2020
 * https://www.codingame.com/multiplayer/bot-programming/tulips-and-daisies
 * https://www.codingame.com/multiplayer/bot-programming/tic-tac-toe
 * https://www.codingame.com/multiplayer/bot-programming/vindinium
 * https://www.codingame.com/multiplayer/bot-programming/xmas-rush
-* https://www.codingame.com/multiplayer/bot-programming/space-shooter
 
 ## Optimization
 
@@ -81,6 +81,7 @@
 * https://www.codingame.com/training/medium/minesweeper-1
 * https://www.codingame.com/training/medium/network-cabling
 * https://www.codingame.com/training/medium/particle-detection-with-cloud-chamber
+* https://www.codingame.com/training/medium/robbery-optimisation
 * https://www.codingame.com/training/medium/rubik%C2%AE
 * https://www.codingame.com/training/medium/scrabble
 * https://www.codingame.com/training/medium/shadows-of-the-knight-episode-1
