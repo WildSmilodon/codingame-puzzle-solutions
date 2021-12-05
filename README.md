@@ -59,6 +59,7 @@
 * https://www.codingame.com/training/easy/nature-of-quadrilaterals
 * https://www.codingame.com/training/easy/onboarding
 * https://www.codingame.com/training/easy/power-of-thor-episode-1
+* https://www.codingame.com/training/easy/sum-of-spirals-diagonals
 * https://www.codingame.com/training/easy/temperatures
 * https://www.codingame.com/training/easy/the-descent
 * https://www.codingame.com/training/easy/the-river-i-
