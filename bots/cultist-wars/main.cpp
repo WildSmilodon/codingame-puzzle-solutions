@@ -22,15 +22,14 @@ int main()
     while (1) {
 
         game.readUnits();
-        game.printMap();
-        game.printUnits();
+        //game.printMap();
+        //game.printUnits();
         game.createDamageMap();
         game.printDamageMap();
+        game.printHitMap();
         
         game.listValidMoves();
         game.printMoves();
-        int x = game.considerShooting(game.me.row,game.me.col,2,2);
-        cerr << "shoot " << x << endl;
 
         // WAIT | unitId MOVE x y | unitId SHOOT target| unitId CONVERT target
         cout << game.getBestMove().order << endl;

@@ -7,10 +7,15 @@ void Game::createDamageMap() {
     for (int i = 0; i < nRow; i++) {
         for (int j = 0; j < nCol; j++) {
             damageMap[i][j] = 0;
+            hitMap[i][j] = 0;
             if (battleField[i][j] == EMPTY) {
                 for (Unit u : hisCultists) {
                     int damage = std::max(damage,considerShooting(u.row,u.col,i,j));
                     if (damage > damageMap[i][j] ) { damageMap[i][j] = damage; }
+                }
+                for (Unit u : myCultists) {
+                    int damage = std::max(damage,considerShooting(u.row,u.col,i,j));
+                    if (damage > hitMap[i][j] ) { hitMap[i][j] = damage; }
                 }
             }
         }
@@ -256,6 +261,8 @@ void Game::considerCultistMoving(int row, int col, Unit u) {
             dist = minDistToHisCultist;
         }
 
+        // TODO : Dont get into converting distance
+
 //        std::cerr << u.id << " " << "minDistToHisCultist " << minDistToHisCultist << std::endl;
 //        std::cerr << u.id << " " << "distToHim " << distToHim << std::endl;
 //        std::cerr << u.id << " " << "minDistToSafety " << minDistToSafety << std::endl;
@@ -419,6 +426,18 @@ void Game::printDamageMap() {
         std::cerr << "|";
         for (int j = 0; j < nCol; j++) {
             std::cerr << damageMap[i][j]; 
+        }
+        std::cerr << "|" << std::endl;        
+    }
+    std::cerr << "|-------------|" << std::endl;
+}
+
+void Game::printHitMap() {
+    std::cerr << "|-------------|" << std::endl;
+    for (int i = 0; i < nRow; i++) {
+        std::cerr << "|";
+        for (int j = 0; j < nCol; j++) {
+            std::cerr << hitMap[i][j]; 
         }
         std::cerr << "|" << std::endl;        
     }

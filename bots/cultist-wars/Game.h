@@ -18,6 +18,7 @@ public:
     int map[nRow][nCol]; // map of the battle field with units
     int bfsDist[nRow][nCol]; // distance from me
     int damageMap[nRow][nCol]; // damage enemy can inflict
+    int hitMap[nRow][nCol]; // damage I can inflict
 
     Unit me;
     Unit he;
@@ -50,6 +51,7 @@ public:
     void considerMe();
     void createDamageMap();
     void printDamageMap();
+    void printHitMap();
     void getDistances(Unit u, int row, int col, int &minDistToNeutralCultist, int &minDistToHisCultist, int &distToHim, int &minDistToSafety);
     int getDistFromBFS(int row, int col);
 
