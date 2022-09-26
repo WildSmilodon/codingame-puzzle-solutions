@@ -25,8 +25,8 @@ int main()
         //game.printMap();
         //game.printUnits();
         game.createDamageMap();
-        game.printDamageMap();
-        game.printHitMap();
+        //game.printDamageMap();
+        game.printMaps();
         
         game.listValidMoves();
         game.printMoves();

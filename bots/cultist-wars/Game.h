@@ -30,6 +30,9 @@ public:
     bool iDieIfIStayPut;
 
     Game(); 
+    bool amIwinning();
+    Move staySafe(Unit u);
+    Move Charge(Unit u);
     void BFS(int row, int col);
     void initRead();
     void printMap();
@@ -45,6 +48,7 @@ public:
     void considerMeMoving(int row, int col);
     void considerConverting(int row, int col, int who);
     void considerCultistMoving(int row, int col, Unit u);
+    void considerCultist(Unit c);
     int considerShooting(int Srow, int Scol, int Trow, int Tcol);
     bool bresenham(int x0, int y0, int x1, int y1);
     void considerCultistShooting(Unit u);
@@ -52,6 +56,8 @@ public:
     void createDamageMap();
     void printDamageMap();
     void printHitMap();
+    void printMaps();
+    Move escapeToSafety(Unit u);
     void getDistances(Unit u, int row, int col, int &minDistToNeutralCultist, int &minDistToHisCultist, int &distToHim, int &minDistToSafety);
     int getDistFromBFS(int row, int col);
 

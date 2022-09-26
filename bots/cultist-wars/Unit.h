@@ -17,6 +17,7 @@ public:
     int mDistTo(Unit target);
     int isHere(int _row, int _col);
     int mDistTo(int r, int c);
+    bool survivesShootout(int damage, int enemyHP);
 
     friend std::ostream& operator<<(std::ostream& ioOut, const Unit& obj);
 };

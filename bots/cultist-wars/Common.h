@@ -16,6 +16,8 @@ static constexpr int CULTIST = 0;
 static constexpr int LEADER  = 1;
 static constexpr int NEUTRAL  = 2;
 
+static constexpr int dRow[4] = {1,-1,0,0};
+static constexpr int dCol[4] = {0,0,1,-1};
 
 
 static constexpr int nRow = 7;

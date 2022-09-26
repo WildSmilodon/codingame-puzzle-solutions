@@ -28,8 +28,28 @@ int Unit::isHere(int _row, int _col) {
 }
 
 
+bool Unit::survivesShootout(int damage, int enemyHP) {
+    bool s = false;
+
+    int nMe = hp / damage;
+    if (hp % damage > 0) { nMe++; }
+
+    int nHe = enemyHP / damage;
+    if (enemyHP % damage > 0) { nHe++; }
+
+    if (nMe < nHe ) {
+        s = false;
+    } else {
+        s = true;
+    }
+
+    return s;
+
+}
+
 std::ostream& operator<<(std::ostream& ioOut, const Unit& obj) {
 
     ioOut << obj.id  << " " << TYPES[obj.type] << " " << obj.hp << " (" << obj.row << "," << obj.col << ") " << OWNERS[myId][obj.owner];
     return ioOut;
 }
+

@@ -101,12 +101,15 @@ void Game::listValidMoves() {
 
 
     for (Unit u : myCultists) {
-        considerCultistMoving(u.row+1,u.col,u);
-        considerCultistMoving(u.row-1,u.col,u);
-        considerCultistMoving(u.row,u.col+1,u);
-        considerCultistMoving(u.row,u.col-1,u);
 
-        considerCultistShooting(u);
+        considerCultist(u);
+
+//        considerCultistMoving(u.row+1,u.col,u);
+//        considerCultistMoving(u.row-1,u.col,u);
+//        considerCultistMoving(u.row,u.col+1,u);
+//        considerCultistMoving(u.row,u.col-1,u);
+//
+//        considerCultistShooting(u);
     }
 
     moves.push_back(Move("WAIT",0));
@@ -124,6 +127,206 @@ void Game::considerMe() {
 //    std::cerr << "ma rr" << damage << " " << damageMap[me.row][me.col] << std::endl;
 
     if ((me.hp - damageMap[me.row][me.col])< 1) { iDieIfIStayPut = true;}
+
+}
+
+
+void Game::considerCultist(Unit c) {
+
+    int damage = 0;
+    // Can I shoot him?
+    if (he.alive) {
+        damage = considerShooting(c.row,c.col,he.row,he.col);
+        if (damage > 0) {
+            std::stringstream buffer;
+            buffer << c.id << " SHOOT " << he.id; 
+            int p = 500 + damage;
+            if (( he.hp - damage ) < 1) { p = p + 2000; } // killshot
+            moves.push_back(Move(buffer.str(),p)); 
+        }
+    }
+
+    // shooting makes sense, I am in danger
+    if (damageMap[c.row][c.col] > 0) {
+        // total HP of units atacking me
+        int totalHP = 0;
+        for (Unit u : hisCultists) {
+            int damage = considerShooting(c.row,c.col,u.row,u.col);
+            if (damage > 0) { totalHP = totalHP + u.hp; }
+        }
+        bool SS = c.survivesShootout(damageMap[c.row][c.col],totalHP);
+        std::cerr << c.id << " SS " << SS << " " << totalHP << " " << c.hp << " " << damageMap[c.row][c.col] <<  std::endl;
+        if (SS) {
+            // I survive a shootout
+            for (Unit u : hisCultists) {
+                damage = considerShooting(c.row,c.col,u.row,u.col);
+                if (damage > 0) {
+                    std::stringstream buffer;
+                    buffer << c.id << " SHOOT " << u.id; 
+                    int p = 0;
+                    p = p + 400 - ( u.hp - damage );       
+                    if (( u.hp - damage ) < 1) { p = p + 2000; } // killshot
+                    moves.push_back(Move(buffer.str(),p)); 
+                }
+            }
+        } else {
+            // I better run
+             std::cerr << c.id << " escape" << std::endl;
+            Move escape = escapeToSafety(c);
+            if (escape.priority > 0) {moves.push_back(escape);}            
+        }
+    } else {
+        // I am safe, should I move anyway ??
+        if (amIwinning()) {
+            // stay safe
+            std::cerr << c.id << " stay safe" << std::endl;
+            Move sSafe = staySafe(c);
+            if (sSafe.priority > 0) {moves.push_back(sSafe);}               
+        } else {
+            // attack
+            std::cerr << c.id << " attack" << std::endl;
+            Move attack = Charge(c);
+            if (attack.priority > 0) {moves.push_back(attack);}              
+            
+        }
+    }
+
+}
+
+bool Game::amIwinning() {
+    int NmyUnits = myCultists.size();
+    if (me.alive) {NmyUnits++;}
+    int NhisUnits = hisCultists.size();
+    if (he.alive) {NhisUnits++;}
+
+    if (NmyUnits >= NhisUnits ) {
+        return true;
+    } else {
+        return false;
+    }
+
+}
+
+
+Move Game::staySafe(Unit u) {
+
+    Move m;
+    m.priority = -9999;
+    int row, col;
+    int rowT, colT;
+    int Tdist = 100;
+    bool found = false;
+
+    for (int i = 0; i<4; i++) {
+        row = u.row + dRow[i];
+        col = u.col + dCol[i];
+
+        if (is(row,col,EMPTY)  && damageMap[row][col] == 0 ) {         
+            found = true;
+            int minDistToNeutralCultist;
+            int minDistToHisCultist;
+            int distToHim;
+            int minDistToSafety;
+            getDistances(u, row, col, minDistToNeutralCultist,minDistToHisCultist,distToHim,minDistToSafety);
+
+            if (std::min(minDistToHisCultist,distToHim) < Tdist ) {
+                Tdist = std::min(minDistToHisCultist,distToHim);
+                rowT = row;
+                colT = col;
+            }
+        }
+    }
+
+    if (found) {
+        std::stringstream buffer;
+        buffer << u.id << " MOVE " << colT << " " << rowT; 
+        int p = 30 - Tdist;
+        m = Move(buffer.str(),p);
+    }
+
+    return m;
+
+}
+
+
+Move Game::Charge(Unit u) {
+
+    Move m;
+    m.priority = -9999;
+    int row, col;
+    int rowT, colT;
+    int Tdist = 10000;
+    bool found = false;
+
+    for (int i = 0; i<4; i++) {
+        row = u.row + dRow[i];
+        col = u.col + dCol[i];
+
+        if (is(row,col,EMPTY)) {         
+            found = true;
+            int minDistToNeutralCultist;
+            int minDistToHisCultist;
+            int distToHim;
+            int minDistToSafety;
+            getDistances(u, row, col, minDistToNeutralCultist,minDistToHisCultist,distToHim,minDistToSafety);
+
+            if (std::min(minDistToHisCultist,distToHim) < Tdist ) {
+                Tdist = std::min(minDistToHisCultist,distToHim);
+                rowT = row;
+                colT = col;
+            }
+        }
+    }
+
+    if (found) {
+        std::stringstream buffer;
+        buffer << u.id << " MOVE " << colT << " " << rowT; 
+        int p = std::max(1,30 - Tdist);
+        m = Move(buffer.str(),p);
+    }
+
+    return m;
+
+}
+
+Move Game::escapeToSafety(Unit u) {
+
+    Move m;
+    m.priority = -9999;
+    int row, col;
+    int rowT, colT;
+    int TminDistToSafety = 10000;
+    bool found = false;
+
+    for (int i = 0; i<4; i++) {
+        row = u.row + dRow[i];
+        col = u.col + dCol[i];
+
+        if (is(row,col,EMPTY)) {         
+            found = true;
+            int minDistToNeutralCultist;
+            int minDistToHisCultist;
+            int distToHim;
+            int minDistToSafety;
+            getDistances(u, row, col, minDistToNeutralCultist,minDistToHisCultist,distToHim,minDistToSafety);
+
+            if (minDistToSafety < TminDistToSafety ) {
+                TminDistToSafety = minDistToSafety;
+                rowT = row;
+                colT = col;
+            }
+        }
+    }
+
+
+    if (found) {
+        std::stringstream buffer;
+        buffer << u.id << " MOVE " << colT << " " << rowT; 
+        int p = std::max(1,750 - TminDistToSafety);
+        m = Move(buffer.str(),p);
+    }
+
+    return m;
 
 }
 
@@ -146,6 +349,7 @@ void Game::considerCultistShooting(Unit shooter) {
     for (Unit u : hisCultists) {
         damage = considerShooting(shooter.row,shooter.col,u.row,u.col);
         if (damage > 0) {
+            std::cerr << "SS " << shooter.survivesShootout(damageMap[shooter.row][shooter.col],u.hp) << std::endl;
             std::stringstream buffer;
             buffer << shooter.id << " SHOOT " << u.id; 
             int p = 0;
@@ -159,12 +363,13 @@ void Game::considerCultistShooting(Unit shooter) {
 
 void Game::getDistances(Unit u, int row, int col, int &minDistToNeutralCultist, int &minDistToHisCultist, int &distToHim, int &minDistToSafety) {
 
+    map[row][col] = map[u.row][u.col];
     map[u.row][u.col] = EMPTY;
-    map[row][col] = u.type;
+    
     
     BFS(row,col);    
 
-    map[u.row][u.col] = u.type;
+    map[u.row][u.col] = map[row][col];
     map[row][col] = EMPTY;
 
     minDistToNeutralCultist = 1000;
@@ -234,7 +439,7 @@ void Game::considerMeMoving(int row, int col) {
         
         if (iDieIfIStayPut) { p = p + 5000; }
 
-        p = p + 100 - minDistToNeutralCultist;         
+        p = p + 100 - minDistToNeutralCultist - damageMap[row][col];         
         if ((me.hp - damageMap[row][col])<1) { p = p - 10000;}
 
         moves.push_back(Move(buffer.str(),p)); 
@@ -407,6 +612,33 @@ void Game::readUnits() {
         }
     }
 }
+
+void Game::printMaps() {
+    std::cerr << "|-------------| |-----DMG-----| |-----HIT-----|" << std::endl;
+    for (int i = 0; i < nRow; i++) {
+        std::cerr << "|";
+        for (int j = 0; j < nCol; j++) {
+            std::cerr << MAPTILES[map[i][j]]; 
+        }
+        std::cerr << "|";     
+
+        std::cerr << " |";
+        for (int j = 0; j < nCol; j++) {
+            std::cerr << damageMap[i][j]; 
+        }
+        std::cerr << "|";  
+
+        std::cerr << " |";
+        for (int j = 0; j < nCol; j++) {
+            std::cerr << hitMap[i][j]; 
+        }
+        std::cerr << "|" << std::endl;  
+
+    }
+    std::cerr << "|-------------| |-------------| |-------------|" << std::endl;
+}
+
+
 
 void Game::printMap() {
     std::cerr << "|-------------|" << std::endl;
