@@ -15,6 +15,13 @@ codingame-merge -o cg.cpp -w /path/to/cppfiles -m main.cpp
 Sync cg.cpp in your browser with condigame website.
 
 
+MacOS:
+
+brew install node
+npm i -g codingame-cpp-merge
+
+
+
 VS Code example tasks file:
 
 

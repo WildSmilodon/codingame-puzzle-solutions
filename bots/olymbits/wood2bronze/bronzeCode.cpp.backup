@@ -1,0 +1,282 @@
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+
+std::vector<int> stringToIntVector(const std::string& str) {
+    std::vector<int> result;
+    std::istringstream iss(str);
+    int num;
+    while (iss >> num) {
+        result.push_back(num);
+    }
+    return result;
+}
+
+
+
+class Player
+{
+    public:
+    int position;
+    int stunTimer;
+    int gold;
+    int silver;
+    int bronze;
+    int score;
+
+    void print()
+    {
+        cerr << "p = " << position << ", s = " << stunTimer << endl;
+    }
+
+    void setScore()
+    {
+        score = silver + gold * 3;
+    }
+
+    bool stunned()
+    {
+        if (stunTimer > 0 )
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+};
+
+class Hurdles
+{
+    public:
+    vector<Player> players;
+    string gpu;
+    string cmd;
+    int length;
+
+    void init()
+    {
+        Player p;
+        players.push_back(p);
+        players.push_back(p);
+        players.push_back(p);
+    }
+
+    void print()
+    {
+        for (Player p : players)
+        {
+            p.print();
+        }
+    }
+
+    void setCommand(int me)
+    {
+
+        cmd = "LEFT";
+
+        if ( !stunIfRight(me) ) 
+        {
+            cmd = "RIGHT";
+        }
+
+        if ( cmd == "LEFT" && !stunIfUp(me) ) 
+        {
+            cmd = "UP";
+        }
+    }
+
+    bool stunIfLeft(int me)
+    {
+        if ( gpu == "GAME_OVER" ) 
+        {
+            return false;
+        }
+        if ( players[me].stunned() )
+        {
+            return false;
+        }
+        if ( players[me].position == length - 2) 
+        {
+            return false;
+        }
+        if ( gpu[players[me].position + 1 ]=='.'  ) 
+        {
+            return false;
+        }    
+        return true;
+    }
+
+    bool stunIfUp(int me)
+    {
+        if ( gpu == "GAME_OVER" ) 
+        {
+            return false;
+        }
+        if ( players[me].stunned() )
+        {
+            return false;
+        }        
+        if ( players[me].position == length - 2) 
+        {
+            return false;
+        }
+        if ( players[me].position == length - 3) 
+        {
+            return false;
+        }
+        if ( gpu[players[me].position + 2 ]=='.'  ) 
+        {
+            return false;
+        }    
+        return true;
+    }
+
+    bool stunIfRight(int me)
+    {
+        if ( gpu == "GAME_OVER" ) 
+        {
+            return false;
+        }
+        if ( players[me].stunned() )
+        {
+            return false;
+        }        
+        if ( players[me].position == length - 2) 
+        {
+            return false;
+        }
+        if ( players[me].position == length - 3 && gpu[players[me].position + 1 ]=='.' ) 
+        {
+            return false;
+        }
+        if ( players[me].position == length - 3 && gpu[players[me].position + 1 ]=='.' && gpu[players[me].position + 2 ]=='.' ) 
+        {
+            return false;
+        }
+        if ( gpu[players[me].position + 1 ]=='.' && gpu[players[me].position + 2 ]=='.' && gpu[players[me].position + 3 ]=='.'  ) 
+        {
+            return false;
+        }    
+        return true;
+    }
+
+};
+
+int main()
+{
+    
+    vector<Hurdles> hGames;
+    
+    int me;
+    cin >> me; cin.ignore();
+    cerr << me << endl;
+    int nb_games;
+    cin >> nb_games; cin.ignore();
+    Hurdles h;
+    h.init();
+    for (int i = 0; i < nb_games; i++) 
+    {
+        hGames.push_back(h);
+    }
+
+    int id = 0;
+
+    // game loop
+    while (1) {
+
+        for (int i = 0; i < 3; i++) {
+            string score_info;
+            getline(cin, score_info);
+            std::vector<int> numbers = stringToIntVector(score_info);
+
+            hGames[0].players[i].gold   = numbers[1];
+            hGames[0].players[i].silver = numbers[2];
+            hGames[0].players[i].bronze = numbers[3];
+            hGames[0].players[i].setScore();
+
+            hGames[1].players[i].gold   = numbers[4];
+            hGames[1].players[i].silver = numbers[5];
+            hGames[1].players[i].bronze = numbers[6];
+            hGames[1].players[i].setScore();
+
+            hGames[2].players[i].gold   = numbers[7];
+            hGames[2].players[i].silver = numbers[8];
+            hGames[2].players[i].bronze = numbers[9];
+            hGames[2].players[i].setScore();
+
+            hGames[3].players[i].gold   = numbers[10];
+            hGames[3].players[i].silver = numbers[11];
+            hGames[3].players[i].bronze = numbers[12];
+            hGames[3].players[i].setScore();
+
+          //  cerr << i << " " << hGames[0].players[i].score * hGames[1].players[i].score * hGames[2].players[i].score * hGames[3].players[i].score << endl;
+
+        }
+
+        for (int i = 0; i < nb_games; i++) {
+            int reg_6;
+            cin >> hGames[i].gpu >> hGames[i].players[0].position >> hGames[i].players[1].position >> hGames[i].players[2].position >> hGames[i].players[0].stunTimer >> hGames[i].players[1].stunTimer >> hGames[i].players[2].stunTimer >> reg_6; cin.ignore();
+            hGames[i].setCommand(me);
+            hGames[i].length = hGames[i].gpu.length();
+            cerr << hGames[i].gpu << hGames[i].players[me].position << endl;
+        }
+
+        if ( hGames[id].gpu == "GAME_OVER" ) 
+        {
+            int sMin = 10000000;
+            int i = -1;
+            for (Hurdles h : hGames) 
+            {
+                i ++;
+                if (h.players[me].score <= sMin) 
+                {
+                    sMin = h.players[me].score;
+                    id = i;
+                }
+            }
+            cerr << "new ID =" << id << endl;
+        }
+
+        int minStun = 100;
+        string cmd = "";
+
+        int s = 0;
+        for (Hurdles h : hGames) {
+            if (h.stunIfRight(me)) {s++;}
+        }
+        cerr << s << " " << "Right" << endl;
+        if (s < minStun) {minStun = s; cmd = "RIGHT";}
+
+        s = 0;
+        for (Hurdles h : hGames) {
+            if (h.stunIfUp(me)) {s++;}
+        }
+        cerr << s << " " << "Up" << endl;
+        if (s < minStun) {minStun = s; cmd = "UP";}
+
+        s = 0;
+        for (Hurdles h : hGames) {
+            if (h.stunIfLeft(me)) {s++;}
+        }
+        cerr << s << " " << "Left" << endl;
+        if (s < minStun) {minStun = s; cmd = "LEFT";}
+
+        cerr << "minS = " << minStun  << " " << cmd << endl;
+      //  cout << hGames[id].cmd << endl;
+        cout << cmd << endl;
+
+        
+    }
+}
